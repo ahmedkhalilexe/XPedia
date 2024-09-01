@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Users {
+  id             String         @id @default(cuid())
+  email          String         @unique
+  password       String
+  firstName      String
+  lastName       String
+  profilePicture String
+  dateOfBirth    DateTime
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  Posts          Posts[]
+  PostComments   PostComments[]
+  PostLikes      PostLikes[]
+  friendsLists   friendsLists[]
+  Friends        Friends[]
+}
+
+model Posts {
+  id           String         @id @default(cuid())
+  body         String
+  user         Users          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Postimages   Postimages[]
+  PostComments PostComments[]
+  PostLikes    PostLikes[]
+}
+
+model Postimages {
+  id        String   @id @default(cuid())
+  uri       String
+  post      Posts    @relation(fields: [postId], references: [id])
+  postId    String
+  createdAt DateTime @default(now())
+}
+
+model PostComments {
+  id        String   @id @default(cuid())
+  body      String
+  user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  post      Posts    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PostLikes {
+  id        String   @id @default(cuid())
+  user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  post      Posts    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  createdAt DateTime @default(now())
+}
+
+model friendsLists {
+  id      String    @id @default(cuid())
+  user    Users     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId String
+  Friends Friends[]
+}
+
+model Friends {
+  id           String       @id @default(cuid())
+  user         Users        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  friendList   friendsLists @relation(fields: [friendListId], references: [id], onDelete: Cascade)
+  friendListId String
+  createdAt    DateTime     @default(now())
+}
