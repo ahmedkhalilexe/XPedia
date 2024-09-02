@@ -13,6 +13,8 @@ app.get('/', (req, res) => {
     res.json({ message: 'Welcome to the API' });
 });
 
+app.use(require("./middlewares/errorHandler"));
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
