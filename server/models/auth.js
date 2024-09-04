@@ -39,6 +39,14 @@ const authModel = {
             }
         );
     },
+
+    findUser: (email)=>{
+         return prisma.users.findUnique({
+            where:{
+                email
+            }
+        }).then(user=>user);
+    }
 }
 
 module.exports = authModel;
