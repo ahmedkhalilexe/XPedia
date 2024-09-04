@@ -1,11 +1,11 @@
-const router = require('express').Router();
+const router = require("express").Router();
 
-router.use("/users", require("./users"));
+router.use("/public", require("./public/public"));
 
-router.use("/auth", require("./auth"));
-
-router.use("/posts", require("./posts"));
-
-router.use("/friends", require("./friends"));
+router.use(
+  "/private",
+  require("../middlewares/JWTHandler"),
+  require("./private/private"),
+);
 
 module.exports = router;
