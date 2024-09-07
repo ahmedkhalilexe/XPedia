@@ -5,7 +5,7 @@ const AppError = require("../utils/AppError");
 const jwt = require("jsonwebtoken");
 const authController = {
   signUp: async (req, res) => {
-    const { email, password, firstName, lastName, dateOfBirth } = req.body;
+    const { email, password, name, dateOfBirth } = req.body;
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -13,8 +13,7 @@ const authController = {
     const newUser = await signUp({
       email,
       password: hashedPassword,
-      firstName,
-      lastName,
+      name,
       dateOfBirth: new Date(dateOfBirth),
     });
     return res.json(newUser);
@@ -26,10 +25,10 @@ const authController = {
       email,
       select: {
         password,
-        firstName: true,
-        lastName: true,
+        name: true,
         dateOfBirth: true,
         profilePicture: true,
+        friendsLists: true,
       },
     });
     if (!user) {
@@ -40,7 +39,7 @@ const authController = {
       throw new AppError("Invalid credentials", 401);
     }
     const accessToken = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, friendsListId: user.friendsLists.id },
       process.env.ACCESS_TOKEN_SECRET,
       {
         expiresIn: "15m",
@@ -64,10 +63,10 @@ const authController = {
       data: {
         id: user.id,
         email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        name: user.name,
         dateOfBirth: user.dateOfBirth,
         profilePicture: user.profilePicture,
+        friendsLists: user.friendsLists,
         accessToken,
       },
     });
@@ -102,8 +101,7 @@ const authController = {
       data: {
         id: user.id,
         email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        name: user.name,
         dateOfBirth: user.dateOfBirth,
         profilePicture: user.profilePicture,
         accessToken,
