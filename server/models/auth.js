@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 const { getUser } = require("./user");
 
 const authModel = {
-  signUp: async ({ email, password, firstName, lastName, dateOfBirth }) => {
+  signUp: async ({ email, password, name, dateOfBirth }) => {
     //check if email already exists
     const user = await getUser({ email, select: {} });
     if (user) {
@@ -15,8 +15,7 @@ const authModel = {
       data: {
         email,
         password,
-        firstName,
-        lastName,
+        name,
         dateOfBirth,
         profilePicture: "",
         friendsLists: {
@@ -26,8 +25,7 @@ const authModel = {
       select: {
         id: true,
         email: true,
-        firstName: true,
-        lastName: true,
+        name: true,
         dateOfBirth: true,
         profilePicture: true,
         friendsLists: true,
