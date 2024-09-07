@@ -1,11 +1,12 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const AppError = require("../utils/AppError");
 
 const userModel = {
   getUser: ({
     email,
     id,
-    select: { firstName, lastName, dateOfBirth, profilePicture, password },
+    select: { name, dateOfBirth, profilePicture, password, friendsLists },
   }) => {
     return prisma.users
       .findUnique({
@@ -16,11 +17,11 @@ const userModel = {
         select: {
           id: true,
           email: true,
-          firstName: !!firstName,
-          lastName: !!lastName,
+          name: !!name,
           dateOfBirth: !!dateOfBirth,
           profilePicture: !!profilePicture,
           password: !!password,
+          friendsLists: !!friendsLists,
         },
       })
       .then((user) => user);
@@ -30,10 +31,63 @@ const userModel = {
       select: {
         id: true,
         email: true,
-        firstName: true,
-        lastName: true,
+        name: true,
         dateOfBirth: true,
         profilePicture: true,
+      },
+    });
+  },
+
+  getUserByName: async ({ name }) => {
+    return prisma.users.findMany({
+      where: {
+        name: {
+          contains: name,
+        },
+      },
+    });
+  },
+  getFriends: async ({ userId }) => {
+    return prisma.users.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        friendsLists: {
+          select: {
+            Friends: true,
+          },
+        },
+      },
+    });
+  },
+
+  addFriend: async ({ userId, friendListId }) => {
+    const isFriend = await prisma.friendsLists.findUnique({
+      where: {
+        id: friendListId,
+        Friends: {
+          every: {
+            userId,
+          },
+        },
+      },
+    });
+    if (isFriend) {
+      throw new AppError("user already a friend", 400);
+    }
+    return prisma.friends.create({
+      data: {
+        userId,
+        friendListId,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            profilePicture: true,
+          },
+        },
       },
     });
   },
