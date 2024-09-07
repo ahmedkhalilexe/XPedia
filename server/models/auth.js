@@ -1,15 +1,12 @@
 const { PrismaClient } = require("@prisma/client");
 const AppError = require("../utils/AppError");
 const prisma = new PrismaClient();
+const { getUser } = require("./user");
 
 const authModel = {
   signUp: async ({ email, password, firstName, lastName, dateOfBirth }) => {
     //check if email already exists
-    const user = await prisma.users.findUnique({
-      where: {
-        email,
-      },
-    });
+    const user = await getUser({ email, select: {} });
     if (user) {
       throw new AppError("Email already exists", 400);
     }
@@ -36,17 +33,6 @@ const authModel = {
         friendsLists: true,
       },
     });
-  },
-
-  findUser: ({ email, id }) => {
-    return prisma.users
-      .findUnique({
-        where: {
-          id,
-          email,
-        },
-      })
-      .then((user) => user);
   },
 };
 

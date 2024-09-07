@@ -1,6 +1,6 @@
 const postsController = {
-    // GET /posts
-    getPosts: (req, res) => {},
-}
+  // POST /posts
+  createPost: (req, res) => {},
+};
 
 module.exports = postsController;

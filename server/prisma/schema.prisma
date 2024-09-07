@@ -27,7 +27,7 @@ model Users {
   Posts          Posts[]
   PostComments   PostComments[]
   PostLikes      PostLikes[]
-  friendsLists   friendsLists[]
+  friendsLists   friendsLists?
   Friends        Friends[]
 }
 
@@ -74,7 +74,7 @@ model PostLikes {
 model friendsLists {
   id      String    @id @default(cuid())
   user    Users     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId String
+  ownerId String    @unique
   Friends Friends[]
 }
 

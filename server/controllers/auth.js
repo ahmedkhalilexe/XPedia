@@ -1,4 +1,5 @@
-const { signUp, findUser } = require("../models/auth");
+const { signUp } = require("../models/auth");
+const { getUser } = require("../models/user");
 const bcrypt = require("bcrypt");
 const AppError = require("../utils/AppError");
 const jwt = require("jsonwebtoken");
@@ -21,7 +22,16 @@ const authController = {
 
   signIn: async (req, res) => {
     const { email, password } = req.body;
-    const user = await findUser({ email });
+    const user = await getUser({
+      email,
+      select: {
+        password,
+        firstName: true,
+        lastName: true,
+        dateOfBirth: true,
+        profilePicture: true,
+      },
+    });
     if (!user) {
       throw new AppError("User not found", 404);
     }
@@ -50,6 +60,7 @@ const authController = {
     });
     return res.status(200).json({
       status: "200",
+      message: "User signed in",
       data: {
         id: user.id,
         email: user.email,
@@ -72,7 +83,7 @@ const authController = {
       process.env.REFRESH_TOKEN_SECRET,
     );
     console.log(decodedRefreshToken.id);
-    const user = await findUser({ id: decodedRefreshToken.id });
+    const user = await getUser({ id: decodedRefreshToken.id, select: {} });
     if (!user) {
       res.clearCookie("rt");
       throw new AppError("Unauthorized", 401);
@@ -87,6 +98,7 @@ const authController = {
 
     return res.status(200).json({
       status: "200",
+      message: "Token refreshed",
       data: {
         id: user.id,
         email: user.email,

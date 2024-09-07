@@ -11,6 +11,7 @@ const errorHandler = (error, req, res, next) => {
     });
   }
   if (error instanceof JsonWebTokenError) {
+    console.log("Error caught in JWT error handler");
     res.clearCookie("rt");
     return res.status(401).json({
       status: 401,
