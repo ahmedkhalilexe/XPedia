@@ -1,5 +1,5 @@
 const { signUp } = require("../models/auth");
-const { getUser } = require("../models/user");
+const { getUser } = require("../models/users");
 const bcrypt = require("bcrypt");
 const AppError = require("../utils/AppError");
 const jwt = require("jsonwebtoken");

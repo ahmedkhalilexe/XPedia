@@ -1,7 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const AppError = require("../utils/AppError");
 const prisma = new PrismaClient();
-const { getUser } = require("./user");
+const { getUser } = require("./users");
 
 const authModel = {
   signUp: async ({ email, password, name, dateOfBirth }) => {
