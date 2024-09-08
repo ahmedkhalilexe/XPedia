@@ -26,6 +26,7 @@ const userModel = {
       })
       .then((user) => user);
   },
+
   getUsers: () => {
     return prisma.users.findMany({
       select: {
@@ -47,6 +48,7 @@ const userModel = {
       },
     });
   },
+
   getFriends: async ({ userId }) => {
     return prisma.users.findUnique({
       where: {
@@ -72,8 +74,11 @@ const userModel = {
           },
         },
       },
+      select: {
+        Friends: true,
+      },
     });
-    if (isFriend) {
+    if (isFriend.Friends.length > 0) {
       throw new AppError("user already a friend", 400);
     }
     return prisma.friends.create({
