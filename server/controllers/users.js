@@ -4,7 +4,7 @@ const {
   getUserByName,
   getFriends,
   addFriend,
-} = require("../models/user");
+} = require("../models/users");
 const AppError = require("../utils/AppError");
 
 const usersController = {
