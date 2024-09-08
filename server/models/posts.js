@@ -1,0 +1,3 @@
+const postsModel = {
+  getPosts: async () => {},
+};
