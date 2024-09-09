@@ -77,6 +77,26 @@ const postsController = {
       data: posts,
     });
   },
+
+  //GET /posts/user/
+  getUserPosts: async (req, res) => {
+    const { userId } = req.query;
+    const posts = await prisma.posts
+      .findMany({
+        where: {
+          userId,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      })
+      .then((posts) => posts);
+    return res.status(200).json({
+      status: 200,
+      message: "Successfully retrieved user's posts",
+      data: posts,
+    });
+  },
 };
 
 module.exports = postsController;
