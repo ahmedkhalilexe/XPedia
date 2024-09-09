@@ -70,6 +70,11 @@ const postsController = {
       where: {
         userId,
       },
+      include: {
+        Postimages: true,
+        PostLikes: true,
+        PostComments: true,
+      },
     });
     return res.status(200).json({
       status: 200,
@@ -86,6 +91,11 @@ const postsController = {
         where: {
           userId,
         },
+        include: {
+          Postimages: true,
+          PostLikes: true,
+          PostComments: true,
+        },
         orderBy: {
           createdAt: "desc",
         },
@@ -95,6 +105,41 @@ const postsController = {
       status: 200,
       message: "Successfully retrieved user's posts",
       data: posts,
+    });
+  },
+
+  //POST /posts/like
+  likePost: async (req, res) => {
+    const userId = req.user.id;
+    const { postId } = req.body;
+    const like = await prisma.postLikes.create({
+      data: {
+        postId,
+        userId,
+      },
+    });
+    return res.status(201).json({
+      status: 201,
+      message: "Successfully liked post",
+      data: like,
+    });
+  },
+
+  //POST /posts/comment
+  commentPost: async (req, res) => {
+    const userId = req.user.id;
+    const { postId, body } = req.body;
+    const comment = await prisma.postComments.create({
+      data: {
+        postId,
+        userId,
+        body,
+      },
+    });
+    return res.status(201).json({
+      status: 201,
+      message: "Successfully commented on post",
+      data: comment,
     });
   },
 };
