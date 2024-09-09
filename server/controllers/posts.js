@@ -23,6 +23,9 @@ const postsController = {
             },
           ],
         },
+        orderBy: {
+          createdAt: "desc",
+        },
         include: {
           Postimages: true,
           PostLikes: true,
