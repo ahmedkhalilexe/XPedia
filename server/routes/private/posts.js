@@ -5,6 +5,8 @@ router.get("/", tryCatch(require("../../controllers/posts").GetPosts));
 
 router.post("/", tryCatch(require("../../controllers/posts").CreatePost));
 
+router.delete("/", tryCatch(require("../../controllers/posts").deletePost));
+
 router.get("/me", tryCatch(require("../../controllers/posts").GetMyPosts));
 
 router.get("/user", tryCatch(require("../../controllers/posts").getUserPosts));

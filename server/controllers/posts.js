@@ -63,6 +63,22 @@ const postsController = {
     });
   },
 
+  //DELETE /posts
+  deletePost: async (req, res) => {
+    const userId = req.user.id;
+    const { postId } = req.body;
+    await prisma.posts.delete({
+      where: {
+        id: postId,
+        userId,
+      },
+    });
+    return res.status(200).json({
+      status: 200,
+      message: "Successfully deleted post",
+    });
+  },
+
   //GET /posts/me
   GetMyPosts: async (req, res) => {
     const userId = req.user.id;
