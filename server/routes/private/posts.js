@@ -1,15 +1,26 @@
 const router = require("express").Router();
+const tryCatch = require("../../utils/tryCatch");
 
-router.get("/", require("../../controllers/posts").GetPosts);
+router.get("/", tryCatch(require("../../controllers/posts").GetPosts));
 
-router.post("/", require("../../controllers/posts").CreatePost);
+router.post("/", tryCatch(require("../../controllers/posts").CreatePost));
 
-router.get("/me", require("../../controllers/posts").GetMyPosts);
+router.get("/me", tryCatch(require("../../controllers/posts").GetMyPosts));
 
-router.get("/user", require("../../controllers/posts").getUserPosts);
+router.get("/user", tryCatch(require("../../controllers/posts").getUserPosts));
 
-router.post("/like", require("../../controllers/posts").likePost);
+router.post("/like", tryCatch(require("../../controllers/posts").likePost));
 
-router.post("/comment", require("../../controllers/posts").commentPost);
+router.delete("/like", tryCatch(require("../../controllers/posts").unlikePost));
+
+router.post(
+  "/comment",
+  tryCatch(require("../../controllers/posts").commentPost),
+);
+
+router.delete(
+  "/comment",
+  tryCatch(require("../../controllers/posts").deleteComment),
+);
 
 module.exports = router;

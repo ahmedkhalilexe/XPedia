@@ -125,6 +125,22 @@ const postsController = {
     });
   },
 
+  //DELETE /posts/like
+  unlikePost: async (req, res) => {
+    const userId = req.user.id;
+    const { postId } = req.body;
+    await prisma.postLikes.deleteMany({
+      where: {
+        postId,
+        userId,
+      },
+    });
+    return res.status(200).json({
+      status: 200,
+      message: "Successfully unliked post",
+    });
+  },
+
   //POST /posts/comment
   commentPost: async (req, res) => {
     const userId = req.user.id;
@@ -140,6 +156,22 @@ const postsController = {
       status: 201,
       message: "Successfully commented on post",
       data: comment,
+    });
+  },
+
+  //DELETE /posts/comment
+  deleteComment: async (req, res) => {
+    const userId = req.user.id;
+    const { commentId } = req.body;
+    await prisma.postComments.delete({
+      where: {
+        id: commentId,
+        userId,
+      },
+    });
+    return res.status(200).json({
+      status: 200,
+      message: "Successfully deleted comment",
     });
   },
 };
