@@ -10,4 +10,9 @@ router.get("/search", tryCatch(require("../../controllers/users").searchUsers));
 router.get("/friends", tryCatch(require("../../controllers/users").getFriends));
 
 router.post("/friends", tryCatch(require("../../controllers/users").addFriend));
+
+router.delete(
+  "/friends",
+  tryCatch(require("../../controllers/users").deleteFriend),
+);
 module.exports = router;

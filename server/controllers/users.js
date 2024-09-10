@@ -5,6 +5,8 @@ const {
   getFriends,
   addFriend,
 } = require("../models/users");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 const AppError = require("../utils/AppError");
 
 const usersController = {
@@ -63,7 +65,6 @@ const usersController = {
   },
 
   // POST /users/friends?id=1
-
   addFriend: async (req, res) => {
     const userId = req.query.userId;
     const friendListId = req.user.friendsListId;
@@ -72,6 +73,22 @@ const usersController = {
       status: 200,
       message: "user added successfully",
       data: friends,
+    });
+  },
+
+  // DELETE /users/friends?id=1
+  deleteFriend: async (req, res) => {
+    const userId = req.query.userId;
+    const friendListId = req.user.friendsListId;
+    const friends = await prisma.friends.deleteMany({
+      where: {
+        userId,
+        friendListId,
+      },
+    });
+    return res.status(200).json({
+      status: 200,
+      message: "friend deleted successfully",
     });
   },
 };
