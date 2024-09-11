@@ -1,0 +1,1126 @@
+openapi: 3.0.0
+info:
+  title: XPedia API
+  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 0.0.1
+servers:
+  - url: http://localhost:3000/api
+
+paths:
+  /public/auth/signIn:
+    post:
+      summary: Sign in
+      description: Sign in to the website
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: test@email.com
+                password:
+                    type: string
+                    format: password
+                    example: password
+      responses:
+        '200':
+          description: User signed in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 200
+                  message:
+                    type: string
+                    example: User signed in
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: cm0tfuipt0002ktitxj724loh
+                      email:
+                        type: string
+                        format: email
+                        example: test@email.com
+                      name:
+                        type: string
+                        example: Test
+                      dateOfBirth:
+                        type: string
+                        format: date
+                        example: 1990-01-01
+                      profilePicture:
+                        type: string
+                        format: uri
+                        example: http://localhost:3000/api/public/images/profile/cm0tfuipt0002ktitxj724loh.jpg
+                      friendsLists:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: cm0tfuipt0003ktityoq8zm9b
+                          ownerId:
+                            type: string
+                            example: cm0tfuipt0002ktitxj724loh
+                      accessToken:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtMHRmdWlwdDAwMDJrdGl0eGo3MjRsb2giLCJpYXQiOjE2MjYwNjYwNzcsImV4cCI6MTYyNjA2NjA3N30.7
+
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 401
+                  message:
+                    type: string
+                    example: Invalid credentials
+
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 404
+                  message:
+                    type: string
+                    example: User not found
+
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 500
+                  message:
+                    type: string
+                    example: Something went wrong!
+  /public/auth/signup:
+    post:
+      summary: User Signup
+      description: Create a new user with email, password, name, and date of birth.
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: test8@test.com
+                password:
+                  type: string
+                  format: password
+                  example: test123
+                name:
+                  type: string
+                  example: ahmed khalil
+                dateOfBirth:
+                  type: string
+                  format: date
+                  example: 2000-01-01
+      responses:
+        '201':
+          description: User successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: cm0xofq8c0000k7hnzxwjtuhn
+                  email:
+                    type: string
+                    example: test8@test.com
+                  name:
+                    type: string
+                    example: ahmed khalil
+                  dateOfBirth:
+                    type: string
+                    format: date-time
+                    example: 2000-01-01T00:00:00.000Z
+                  profilePicture:
+                    type: string
+                    example: ""
+                  friendsLists:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: cm0xofq8p0001k7hna9gpbff6
+                      ownerId:
+                        type: string
+                        example: cm0xofq8c0000k7hnzxwjtuhn
+        '400':
+          description: Bad Request - Email already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Email already exists
+  /public/auth/getRefreshToken:
+    get:
+      summary: Refresh Access Token
+      description: Get a new access token using the refresh token sent in the request cookie.
+      tags:
+        - Authentication
+      parameters:
+        - in: cookie
+          name: rt
+          required: true
+          schema:
+            type: string
+          description: The refresh token sent via cookie.
+      responses:
+        '200':
+          description: Token successfully refreshed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "200"
+                  message:
+                    type: string
+                    example: "Token refreshed"
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "cm0tfuipt0002ktitxj724loh"
+                      email:
+                        type: string
+                        example: "test7@test.com"
+                      accessToken:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtMHRmdWlwdDAwMDJrdGl0eGo3MjRsb2giLCJlbWFpbCI6InRlc3Q3QHRlc3QuY29tIiwiaWF0IjoxNzI2MDY5ODczLCJleHAiOjE3MjYwNzA3NzN9.1XIzKyfm1tLC5wTxO0DewyZsY9DjUkJL3iQBiwEldhw"
+        '401':
+          description: Unauthorized - Invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "401"
+                  message:
+                    type: string
+                    example: "Unauthorized"
+  /private/users/:
+    get:
+      summary: Get Users
+      description: Retrieve a list of users. Requires Bearer token in the Authorization header.
+      tags:
+        - Users
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '200':
+          description: Successfully retrieved users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Successfully retrieved users
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: cm0kybnqb0000cjww3o6w4hac
+                        email:
+                          type: string
+                          example: test@test.com
+                        name:
+                          type: string
+                          example: ""
+                        dateOfBirth:
+                          type: string
+                          format: date-time
+                          example: 2000-01-01T00:00:00.000Z
+                        profilePicture:
+                          type: string
+                          example: ""
+        '403':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "403"
+                  message:
+                    type: string
+                    example: Unauthorized
+  /private/users/id:
+    get:
+      summary: Get User by ID
+      description: Retrieve a user by their ID. Requires Bearer token in the Authorization header.
+      tags:
+        - Users
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the user to retrieve.
+      responses:
+        '200':
+          description: Successfully retrieved user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Successfully retrieved user
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: cm0kybnqb0000cjww3o6w4hac
+                      email:
+                        type: string
+                        example: test@test.com
+                      dateOfBirth:
+                        type: string
+                        format: date-time
+                        example: 2000-01-01T00:00:00.000Z
+                      profilePicture:
+                        type: string
+                        example: ""
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: User not found
+        '403':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 403
+                  message:
+                    type: string
+                    example: Unauthorized
+  /private/users/search:
+    get:
+      summary: Search Users
+      description: Search for users by name. Requires Bearer token in the Authorization header.
+      tags:
+        - Users
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: string
+          description: The name of the user to search for.
+      responses:
+        '200':
+          description: Successfully retrieved users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Successfully retrieved users
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: cm0kybnqb0000cjww3o6w4hac
+                        email:
+                          type: string
+                          example: "test6@test.com"
+                        name:
+                          type: string
+                          example: "ahmed khalil"
+                        profilePicture:
+                          type: string
+                          format: uri
+                          example: ""
+
+
+        '403':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "403"
+                  message:
+                    type: string
+                    example: Unauthorized
+  /private/users/friends:
+    get:
+      summary: Get User's Friends
+      description: Retrieve a user's friends list by user ID. Requires Bearer token in the Authorization header.
+      tags:
+        - Friends
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: The ID of the user whose friends list is being retrieved.
+      responses:
+        '200':
+          description: Successfully retrieved user's friends
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Successfully retrieved user's friends
+                  data:
+                    type: object
+                    properties:
+                      friendsLists:
+                        type: object
+                        properties:
+                          Friends:
+                            type: array
+                            items:
+                              type: string
+                            example: [ ]
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+    post:
+      summary: Add User to Friends List
+      description: Add a user to the friends list by user ID. Requires Bearer token in the Authorization header.
+      tags:
+        - Friends
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: The ID of the user to be added to the friends list.
+      responses:
+        '200':
+          description: User added successfully to friends list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: user added successfully
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: cm0y2zuff0001rww2b66jkffd
+                      userId:
+                        type: string
+                        example: cm0se98rv0000njjv4j6qt758
+                      friendListId:
+                        type: string
+                        example: cm0tfuipt0003ktityoq8zm9b
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2024-09-11T16:34:51.682Z
+                      user:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: ahmed khalil
+                          profilePicture:
+                            type: string
+                            example: ""
+        '400':
+          description: Bad Request - User already a friend
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: user already a friend
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+    delete:
+      summary: Delete Friend from User's Friends List
+      description: Remove a friend from the user's friends list by user ID. Requires Bearer token in the Authorization header.
+      tags:
+        - Friends
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: The ID of the friend to be removed from the user's friends list.
+      responses:
+        '200':
+          description: Friend deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: friend deleted successfully
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+  /private/posts/:
+    get:
+      summary: Get User's Posts
+      description: Retrieve the posts made by the user. Requires Bearer token in the Authorization header.
+      tags:
+        - Posts
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '200':
+          description: Successfully retrieved user's posts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Successfully retrieved user's posts
+                  data:
+                    type: array
+                    items:
+                      type: object
+                    example: [ ]
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+    post:
+      summary: Create a New Post
+      description: Create a new post for the user. Requires Bearer token in the Authorization header.
+      tags:
+        - Posts
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+                  example: test body4
+      responses:
+        '201':
+          description: Successfully created post
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: Successfully created post
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: cm0y3emsp0001e8tfiai4bnqk
+                      body:
+                        type: string
+                        example: test body4
+                      userId:
+                        type: string
+                        example: cm0tfuipt0002ktitxj724loh
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2024-09-11T16:46:21.598Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2024-09-11T16:46:21.598Z
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+    delete:
+      summary: Delete a Post
+      description: Allows a user to delete a post by specifying the postId in the request body. Requires Bearer token in the Authorization header.
+      tags:
+        - Posts
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                postId:
+                  type: string
+                  example: cm0y3emsp0001e8tfiai4bnqk
+      responses:
+        '200':
+          description: Successfully deleted post
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Successfully deleted post
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+  /private/posts/me:
+    get:
+      summary: Get Authenticated User's Posts
+      description: Retrieve the posts made by the authenticated user. Requires Bearer token in the Authorization header.
+      tags:
+        - Posts
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '200':
+          description: Successfully retrieved user's posts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Successfully retrieved user's posts
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: cm0y3emsp0001e8tfiai4bnqk
+                        body:
+                          type: string
+                          example: test body4
+                        userId:
+                          type: string
+                          example: cm0tfuipt0002ktitxj724loh
+                        createdAt:
+                          type: string
+                          format: date-time
+                          example: 2024-09-11T16:46:21.598Z
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          example: 2024-09-11T16:46:21.598Z
+                        Postimages:
+                          type: array
+                          items:
+                            type: object
+                          example: [ ]
+                        PostLikes:
+                          type: array
+                          items:
+                            type: object
+                          example: [ ]
+                        PostComments:
+                          type: array
+                          items:
+                            type: object
+                          example: [ ]
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+  /private/posts/user:
+    get:
+      summary: Get Posts by User
+      description: Retrieve posts made by a specific user identified by userId. Requires Bearer token in the Authorization header.
+      tags:
+        - Posts
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: The ID of the user whose posts are being retrieved.
+      responses:
+        '200':
+          description: Successfully retrieved user's posts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Successfully retrieved user's posts
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: cm0y3emsp0001e8tfiai4bnqk
+                        body:
+                          type: string
+                          example: test body4
+                        userId:
+                          type: string
+                          example: cm0tfuipt0002ktitxj724loh
+                        createdAt:
+                          type: string
+                          format: date-time
+                          example: 2024-09-11T16:46:21.598Z
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          example: 2024-09-11T16:46:21.598Z
+                        Postimages:
+                          type: array
+                          items:
+                            type: object
+                          example: [ ]
+                        PostLikes:
+                          type: array
+                          items:
+                            type: object
+                          example: [ ]
+                        PostComments:
+                          type: array
+                          items:
+                            type: object
+                          example: [ ]
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+  /private/posts/like:
+    post:
+      summary: Like a Post
+      description: Allows a user to like a post by specifying the postId in the request body. Requires Bearer token in the Authorization header.
+      tags:
+        - Posts
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                postId:
+                  type: string
+                  example: cm0y3emsp0001e8tfiai4bnqk
+      responses:
+        '201':
+          description: Successfully liked post
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: Successfully liked post
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: cm0y3nmok0003e8tfjvvhkld9
+                      userId:
+                        type: string
+                        example: cm0tfuipt0002ktitxj724loh
+                      postId:
+                        type: string
+                        example: cm0y3emsp0001e8tfiai4bnqk
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2024-09-11T16:53:21.366Z
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+    delete:
+      summary: Unlike a Post
+      description: Allows a user to unlike a post by specifying the postId in the request body. Requires Bearer token in the Authorization header.
+      tags:
+        - Posts
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                postId:
+                  type: string
+                  example: cm0y3emsp0001e8tfiai4bnqk
+      responses:
+        '200':
+          description: Successfully unliked post
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Successfully unliked post
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+  /private/posts/comment:
+    post:
+      summary: Comment on a Post
+      description: Allows a user to comment on a post by specifying the postId and comment body in the request body. Requires Bearer token in the Authorization header.
+      tags:
+        - Posts
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                postId:
+                  type: string
+                  example: cm0ttc3sw0001ucd9juepku86
+                body:
+                  type: string
+                  example: comment test
+      responses:
+        '201':
+          description: Successfully commented on post
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: Successfully commented on post
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: cm0y4g9pm0003z0yf9gpx3ahi
+                      body:
+                        type: string
+                        example: comment test
+                      userId:
+                        type: string
+                        example: cm0tfuipt0002ktitxj724loh
+                      postId:
+                        type: string
+                        example: cm0ttc3sw0001ucd9juepku86
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2024-09-11T17:15:37.573Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2024-09-11T17:15:37.573Z
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+    delete:
+      summary: Delete a Comment
+      description: Allows a user to delete a comment by specifying the commentId in the request body. Requires Bearer token in the Authorization header.
+      tags:
+        - Posts
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                commentId:
+                  type: string
+                  example: cm0y4g9pm0003z0yf9gpx3ahi
+      responses:
+        '200':
+          description: Successfully deleted comment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Successfully deleted comment
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
