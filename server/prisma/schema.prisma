@@ -15,19 +15,21 @@ datasource db {
 }
 
 model Users {
-  id             String         @id @default(cuid())
-  email          String         @unique
-  password       String
-  name           String         @default("")
-  profilePicture String         @default("")
-  dateOfBirth    DateTime
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  Posts          Posts[]
-  PostComments   PostComments[]
-  PostLikes      PostLikes[]
-  friendsLists   friendsLists?
-  Friends        Friends[]
+  id                       String                     @id @default(cuid())
+  email                    String                     @unique
+  password                 String
+  name                     String                     @default("")
+  profilePicture           String                     @default("")
+  dateOfBirth              DateTime
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  Posts                    Posts[]
+  PostComments             PostComments[]
+  PostLikes                PostLikes[]
+  friendsLists             friendsLists?
+  Friends                  Friends[]
+  Messages                 Messages[]
+  ConversationParticipants ConversationParticipants[]
 }
 
 model Posts {
@@ -64,9 +66,9 @@ model PostComments {
 model PostLikes {
   id        String   @id @default(cuid())
   user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
+  userId    String   @unique
   post      Posts    @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    String
+  postId    String   @unique
   createdAt DateTime @default(now())
 }
 
@@ -84,4 +86,34 @@ model Friends {
   friendList   friendsLists @relation(fields: [friendListId], references: [id], onDelete: Cascade)
   friendListId String
   createdAt    DateTime     @default(now())
+
+  @@unique([userId, friendListId])
+}
+
+model Conversations {
+  id                       String                     @id @default(cuid())
+  createdAt                DateTime                   @default(now())
+  ConversationParticipants ConversationParticipants[]
+  messages                 Messages[]
+}
+
+model ConversationParticipants {
+  id             String        @id @default(cuid())
+  conversation   Conversations @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String
+  user           Users         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+
+  @@unique([conversationId, userId])
+}
+
+model Messages {
+  id             String        @id @default(cuid())
+  body           String
+  user           Users         @relation(fields: [senderID], references: [id], onDelete: Cascade)
+  senderID       String
+  conversation   Conversations @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }

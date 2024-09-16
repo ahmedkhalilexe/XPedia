@@ -1,15 +1,17 @@
 const express = require("express");
 const app = express();
 const PORT = 3000;
-require("dotenv").config();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
 const swaggerDocument = YAML.load("./swagger.yaml");
+const { createServer } = require("http");
+const server = createServer(app);
+const socketInit = require("./services/socketioInit");
+require("dotenv").config();
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
@@ -22,6 +24,8 @@ app.get("/", (req, res) => {
 
 app.use(require("./middlewares/errorHandler"));
 
-app.listen(PORT, () => {
+socketInit(server);
+
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
