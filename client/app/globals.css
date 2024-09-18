@@ -86,3 +86,19 @@
     @apply bg-background text-foreground;
   }
 }
+.containerBg{
+  position: relative;
+  z-index: 1;
+}
+.containerBg:before{
+  /*opacity: 1%;*/
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .2;
+  z-index: -1;
+  background: radial-gradient(circle, transparent 20%, rgb(236, 240, 241) 20%, rgb(236, 240, 241) 80%, transparent 80%, transparent) 0 0% / 65px 65px, radial-gradient(circle, transparent 20%, rgb(236, 240, 241) 20%, rgb(236, 240, 241) 80%, transparent 80%, transparent) 33px 33px / 65px 65px, linear-gradient(rgb(52, 152, 219) 2.6px, transparent 2.6px) 0 -1.3px / 33px 33px, linear-gradient(90deg, rgb(52, 152, 219) 2.6px, rgb(236, 240, 241) 2.6px) -1.3px 0 / 33px 33px;
+}
