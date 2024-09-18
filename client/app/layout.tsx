@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Playpen_Sans } from "next/font/google";
 import "./globals.css";
+import {ReactNode} from "react";
 
-const inter = Inter({ subsets: ["latin"] });
+const playpenSans = Playpen_Sans({
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -12,11 +15,11 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={playpenSans.className}>{children}</body>
     </html>
   );
 }
