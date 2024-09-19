@@ -1,12 +1,7 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  signInSchema,
-  SignInType,
-  signUpSchema,
-  SignUpType,
-} from "@/app/utils/zod";
+import { signUpSchema, SignUpType } from "@/app/utils/zod";
 import {
   Form,
   FormControl,
@@ -17,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import useSignUpMutation from "@/app/hooks/authHooks/useSignUpMutation";
 
 type Props = {};
 
@@ -32,11 +28,13 @@ function SignUpForm(props: Props) {
     },
   });
 
+  const signUpMutation = useSignUpMutation();
+
   return (
     <Form {...form}>
       <form
         className={"flex flex-col gap-6"}
-        onSubmit={form.handleSubmit(() => {})}
+        onSubmit={form.handleSubmit((data) => signUpMutation.mutate(data))}
       >
         <FormField
           control={form.control}

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import useSignInMutation from "@/app/hooks/authHooks/useSignInMutation";
 
 type Props = {};
 
@@ -23,12 +24,13 @@ function SignInForm(props: Props) {
       password: "",
     },
   });
+  const signInMutation = useSignInMutation();
 
   return (
     <Form {...form}>
       <form
         className={"flex flex-col gap-6"}
-        onSubmit={form.handleSubmit(() => {})}
+        onSubmit={form.handleSubmit((data) => signInMutation.mutate(data))}
       >
         <FormField
           control={form.control}

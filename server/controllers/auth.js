@@ -16,7 +16,7 @@ const authController = {
       name,
       dateOfBirth: new Date(dateOfBirth),
     });
-    return res.json(newUser);
+    return res.json({ status: "200", message: "User signed Up" });
   },
 
   signIn: async (req, res) => {

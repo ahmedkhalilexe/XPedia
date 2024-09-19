@@ -1,12 +1,19 @@
+"use client";
 import SignInForm from "@/app/components/auth/SignInForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SignUpForm from "@/app/components/auth/SignUpForm";
+import ClientProvider from "@/components/reactQuery/ClientProvider";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
 
 type Props = {};
 
 function AuthPage(props: Props) {
-  return (
+  const { isAuth, loading } = useSelector(
+    (state: RootState) => state.user.auth,
+  );
+  return !loading && !isAuth ? (
     <main className="flex min-h-screen gap-8 flex-col items-center justify-center bg-lightGray containerBg">
       {/*<div*/}
       {/*  className={*/}
@@ -37,7 +44,9 @@ function AuthPage(props: Props) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <SignInForm />
+              <ClientProvider>
+                <SignInForm />
+              </ClientProvider>
             </CardContent>
           </Card>
         </TabsContent>
@@ -49,7 +58,9 @@ function AuthPage(props: Props) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <SignUpForm />
+              <ClientProvider>
+                <SignUpForm />
+              </ClientProvider>
             </CardContent>
           </Card>
         </TabsContent>
@@ -59,7 +70,7 @@ function AuthPage(props: Props) {
       {/*<h1 className={" font-bold text-3xl"}>Hello, World!</h1>*/}
       {/*<SignInForm />*/}
     </main>
-  );
+  ) : null;
 }
 
 export default AuthPage;
