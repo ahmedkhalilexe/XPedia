@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useSignInMutation from "@/app/hooks/authHooks/useSignInMutation";
+import { RotateCw } from "lucide-react";
 
 type Props = {};
 
@@ -38,7 +39,12 @@ function SignInForm(props: Props) {
             <FormItem>
               <FormLabel className={" text-xl text-gray-900 "}>Email</FormLabel>
               <FormControl>
-                <Input {...field} type={"email"} className={"text-gray-900"} />
+                <Input
+                  {...field}
+                  type={"email"}
+                  className={"text-gray-900 font-medium"}
+                  placeholder={"example@email.dz"}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -56,7 +62,8 @@ function SignInForm(props: Props) {
                 <Input
                   {...field}
                   type={"password"}
-                  className={"text-gray-900"}
+                  className={"text-gray-900 font-medium"}
+                  placeholder={"Password"}
                 />
               </FormControl>
               <FormMessage />
@@ -67,10 +74,14 @@ function SignInForm(props: Props) {
         <Button
           type={"submit"}
           className={
-            " w-full text-lg bg-lightBlue text-gray-900 font-semibold hover:bg-blue-300"
+            "w-full text-lg bg-lightBlue text-gray-900 font-semibold hover:bg-blue-300 "
           }
         >
-          Sign In
+          {signInMutation.isLoading ? (
+            <RotateCw className={" animate-spin"} />
+          ) : (
+            "Sign In"
+          )}
         </Button>
       </form>
     </Form>
