@@ -9,7 +9,7 @@ export type authState = {
   };
   auth: {
     isAuth: boolean;
-    loading: boolean;
+    status?: "idle" | "loading" | "success" | "failed";
   };
 };
 
@@ -43,4 +43,10 @@ export type signUpPayload = {
   password: string;
   name: string;
   dateOfBirth: string;
+};
+
+export type refreshTokenResponse = {
+  status: string;
+  message: string;
+  data: user;
 };

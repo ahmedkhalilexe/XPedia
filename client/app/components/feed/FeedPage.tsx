@@ -5,10 +5,8 @@ import { RootState } from "@/app/redux/store";
 type Props = {};
 
 function FeedPage(props: Props) {
-  const { isAuth, loading } = useSelector(
-    (state: RootState) => state.user.auth,
-  );
-  return !loading && isAuth ? (
+  const { isAuth, status } = useSelector((state: RootState) => state.user.auth);
+  return status === "success" && isAuth ? (
     <div>
       <h1 className={" text-black"}>Feed Page</h1>
     </div>

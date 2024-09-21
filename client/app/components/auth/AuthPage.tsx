@@ -10,18 +10,11 @@ import { RootState } from "@/app/redux/store";
 type Props = {};
 
 function AuthPage(props: Props) {
-  const { isAuth, loading } = useSelector(
-    (state: RootState) => state.user.auth,
-  );
-  return !loading && !isAuth ? (
+  const { isAuth, status } = useSelector((state: RootState) => state.user.auth);
+  return status === "failed" && !isAuth ? (
     <main className="flex min-h-screen gap-8 flex-col items-center justify-center bg-lightGray containerBg">
-      {/*<div*/}
-      {/*  className={*/}
-      {/*    "flex min-h-full flex-col items-center justify-center p-24 flex-1"*/}
-      {/*  }*/}
-      {/*>*/}
       <h1 className={" text-4xl font-bold"}>XPedia</h1>
-      <Tabs defaultValue={"SignIn"} className={"w-1/3 drop-shadow-md"}>
+      <Tabs defaultValue={"SignIn"} className={"w-5/6 md:w-1/3 drop-shadow-md"}>
         <TabsList className={"w-full"}>
           <TabsTrigger
             value={"SignIn"}
@@ -65,10 +58,6 @@ function AuthPage(props: Props) {
           </Card>
         </TabsContent>
       </Tabs>
-      {/*</div>*/}
-      {/*<div className={"min-h-full flex-1 bg-blue-900"}></div>*/}
-      {/*<h1 className={" font-bold text-3xl"}>Hello, World!</h1>*/}
-      {/*<SignInForm />*/}
     </main>
   ) : null;
 }
