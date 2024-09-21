@@ -3,6 +3,7 @@ import { Playpen_Sans } from "next/font/google";
 import "./globals.css";
 import { ReactNode } from "react";
 import AuthProvider from "@/app/redux/auth/AuthProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const playpenSans = Playpen_Sans({
   subsets: ["latin"],
@@ -20,9 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AuthProvider>
-        <body className={playpenSans.className}>{children}</body>
-      </AuthProvider>
+      <body className={playpenSans.className}>
+        <AuthProvider>{children}</AuthProvider>
+        <Toaster />
+      </body>
     </html>
   );
 }
