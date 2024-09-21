@@ -1,8 +1,8 @@
-import { useDispatch } from "react-redux";
 import { useMutation } from "react-query";
-import { signIn } from "@/app/redux/auth/userSlice";
 import { signInResponse, signUpPayload } from "@/app/utils/types";
 import { publicAxios } from "@/app/utils/axios";
+import { useToast } from "@/hooks/use-toast";
+import { AxiosError } from "axios";
 
 const signUpMutationFunction = async (data: signUpPayload) => {
   const res = await publicAxios.post("/auth/signUp", { ...data });
@@ -10,11 +10,30 @@ const signUpMutationFunction = async (data: signUpPayload) => {
 };
 
 const useSignUpMutation = () => {
-  const dispatch = useDispatch();
+  const { toast } = useToast();
   return useMutation({
     mutationFn: signUpMutationFunction,
     onSuccess: (data) => {
-      console.log("Sign Up and Sign In Success");
+      toast({
+        variant: "default",
+        title: "Signed Up successfully",
+        description: "You have successfully signed up",
+      });
+    },
+    onError: (error: AxiosError) => {
+      if (error.status === 400) {
+        toast({
+          variant: "destructive",
+          title: "Sign Up failed",
+          description: "Could not sign up, Email already exists",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Sign Up failed",
+          description: "Could not sign up, please try again",
+        });
+      }
     },
   });
 };
