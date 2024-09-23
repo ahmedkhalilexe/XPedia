@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Playpen_Sans } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ReactNode } from "react";
 import AuthProvider from "@/app/redux/auth/AuthProvider";
 import { Toaster } from "@/components/ui/toaster";
 
-const playpenSans = Playpen_Sans({
+const montserrat = Montserrat({
   subsets: ["latin"],
 });
 
@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={playpenSans.className}>
+      <body className={montserrat.className}>
         <AuthProvider>{children}</AuthProvider>
         <Toaster />
       </body>
