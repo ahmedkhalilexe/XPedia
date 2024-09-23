@@ -1,7 +1,7 @@
 "use client";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
-import SideBar from "@/app/components/feed/SideBar";
+import SideBar from "@/app/components/feed/SideBar/SideBar";
 import Feed from "@/app/components/feed/Feed";
 
 type Props = {};

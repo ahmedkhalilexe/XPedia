@@ -5,7 +5,7 @@ type Props = {};
 
 function UserAvatar(props: Props) {
   return (
-    <div className={" flex flex-col w-fit justify-center items-center "}>
+    <div className={" flex flex-col w-fit justify-center items-center gap-2"}>
       <Link href={"/#"}>
         <Avatar
           className={
