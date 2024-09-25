@@ -13,7 +13,7 @@ function SideBar(props: Props) {
       }
     >
       <div className={"flex flex-col gap-6 items-center"}>
-        <UserAvatar />
+        <UserAvatar textClass={"mt-2"} />
         <SideBarLinks />
       </div>
       <Button
