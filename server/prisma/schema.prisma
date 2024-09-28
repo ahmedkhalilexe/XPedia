@@ -66,10 +66,12 @@ model PostComments {
 model PostLikes {
   id        String   @id @default(cuid())
   user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String   @unique
+  userId    String
   post      Posts    @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    String   @unique
+  postId    String
   createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
 }
 
 model friendsLists {

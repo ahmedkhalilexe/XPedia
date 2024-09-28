@@ -22,7 +22,7 @@ const useSignInMutation = () => {
           user: data.data,
           auth: {
             isAuth: true,
-            loading: false,
+            status: "success",
           },
         }),
       );

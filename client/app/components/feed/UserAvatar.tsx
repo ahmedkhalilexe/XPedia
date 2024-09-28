@@ -1,6 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
 
 type Props = {
   className?: string;
@@ -8,16 +10,21 @@ type Props = {
 };
 
 function UserAvatar({ className, textClass }: Props) {
+  const { name, profilePicture } = useSelector(
+    (state: RootState) => state.user.user,
+  );
   return (
     <div className={" flex flex-col w-fit justify-center items-center"}>
       <Link href={"/#"}>
         <Avatar
           className={cn(
-            "w-24 h-24 hover:drop-shadow-lg transition-all duration-300 ",
+            "w-16 h-16 lg:w-24 lg:h-24 hover:drop-shadow-lg transition-all duration-300 ",
             className,
           )}
         >
-          <AvatarImage src={"https://github.com/shadcn.png"} />
+          <AvatarImage
+            src={profilePicture || "https://github.com/shadcn.png"}
+          />
           <AvatarFallback className={" font-bold"}>XP</AvatarFallback>
         </Avatar>
       </Link>
@@ -28,7 +35,7 @@ function UserAvatar({ className, textClass }: Props) {
             textClass,
           )}
         >
-          User Name
+          {name}
         </h1>
       </Link>
     </div>

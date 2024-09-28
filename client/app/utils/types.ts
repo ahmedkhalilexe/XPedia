@@ -50,3 +50,54 @@ export type refreshTokenResponse = {
   message: string;
   data: user;
 };
+
+export type postPayload = {
+  body: string;
+  attachments?: string[];
+};
+
+export type postAddResponse = {
+  status: string;
+  message: string;
+  data: {
+    id: string;
+    body: string;
+    userId: string;
+    createdAt: string;
+    updatedAt: string;
+    attachments?: string[];
+  };
+};
+export type post = {
+  id: string;
+  body: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+  Postimages: string[];
+  PostLikes: string[];
+  PostComments: string[];
+  user: {
+    name: string;
+    profilePicture: string;
+  };
+};
+export type postsGetResponse = {
+  status: string;
+  message: string;
+  data: post[];
+};
+export type postLikeResponse = {
+  status: string;
+  message: string;
+  data: {
+    id: string;
+    postId: string;
+    userId: string;
+    createdAt: string;
+  };
+};
+export type postUnlikeResponse = {
+  status: string;
+  message: string;
+};

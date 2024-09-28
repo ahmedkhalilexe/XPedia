@@ -9,7 +9,7 @@ type Props = {};
 function FeedPage(props: Props) {
   const { isAuth, status } = useSelector((state: RootState) => state.user.auth);
   return status === "success" && isAuth ? (
-    <main className={" flex min-h-screen"}>
+    <main className={" flex min-h-screen relative"}>
       {/* Sidebar */}
       <SideBar />
       {/* Feed */}

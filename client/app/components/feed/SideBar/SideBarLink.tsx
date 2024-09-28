@@ -12,11 +12,11 @@ function SideBarLink({ href, title, children }: Props) {
     <Link href={href}>
       <li
         className={
-          " flex w-full px-3 py-2 rounded-xl items-center text-gray-900 gap-5 hover:bg-darkPurple hover:text-saltWhite transition-all duration-300 ease-in-out"
+          " flex w-full px-3 py-2 rounded-xl justify-center lg:justify-start items-center text-gray-900 gap-5 hover:bg-darkPurple hover:text-saltWhite transition-all duration-300 ease-in-out"
         }
       >
         {children}
-        <h2 className={" text-xl font-bold"}>{title}</h2>
+        <h2 className={" text-xl font-bold hidden lg:block"}>{title}</h2>
       </li>
     </Link>
   );

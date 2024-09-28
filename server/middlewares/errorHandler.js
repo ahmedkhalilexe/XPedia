@@ -15,6 +15,7 @@ const errorHandler = (error, req, res, next) => {
   if (error instanceof PrismaClientKnownRequestError) {
     //handle Prisma errors
     console.error("Error caught in Prisma error handler");
+    console.error(error);
     return res.status(401).json({
       status: 401,
       message: error.meta.cause,
