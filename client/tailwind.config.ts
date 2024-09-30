@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      gridTemplateRows: {
+        commentSection: "min-content auto min-content",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

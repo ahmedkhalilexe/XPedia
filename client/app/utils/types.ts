@@ -59,14 +59,7 @@ export type postPayload = {
 export type postAddResponse = {
   status: string;
   message: string;
-  data: {
-    id: string;
-    body: string;
-    userId: string;
-    createdAt: string;
-    updatedAt: string;
-    attachments?: string[];
-  };
+  data: post;
 };
 export type post = {
   id: string;
@@ -75,12 +68,13 @@ export type post = {
   createdAt: string;
   updatedAt: string;
   Postimages: string[];
-  PostLikes: string[];
-  PostComments: string[];
+  PostLikes: like[];
+  PostComments: comment[];
   user: {
     name: string;
     profilePicture: string;
   };
+  isLiked: boolean;
 };
 export type postsGetResponse = {
   status: string;
@@ -100,4 +94,33 @@ export type postLikeResponse = {
 export type postUnlikeResponse = {
   status: string;
   message: string;
+};
+
+export type like = {
+  id: string;
+  postId: string;
+  userId: string;
+  createdAt: string;
+};
+
+export type comment = {
+  id: string;
+  body: string;
+  userId: string;
+  postId: string;
+  createdAt: string;
+  updatedAt: string;
+  user: {
+    name: string;
+    profilePicture: string;
+  };
+};
+export type commentAddResponse = {
+  status: string;
+  message: string;
+  data: comment;
+};
+
+export type feedState = {
+  posts: post[];
 };

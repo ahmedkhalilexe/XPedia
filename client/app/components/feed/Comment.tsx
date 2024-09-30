@@ -1,9 +1,17 @@
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { comment } from "@/app/utils/types";
+import { formatDistanceToNow } from "date-fns";
 
-type Props = {};
+type Props = {
+  commentContent: comment;
+};
 
-function Comment(props: Props) {
+function Comment({ commentContent }: Props) {
+  const timeAgo = formatDistanceToNow(new Date(commentContent.createdAt), {
+    addSuffix: true,
+  });
+
   return (
     <div className={"flex gap-2 max-w-full"}>
       <Link href={"/#"}>
@@ -12,7 +20,12 @@ function Comment(props: Props) {
             "w-10 h-10 hover:drop-shadow-lg transition-all duration-300 "
           }
         >
-          <AvatarImage src={"https://github.com/shadcn.png"} />
+          <AvatarImage
+            src={
+              commentContent.user.profilePicture ||
+              "https://github.com/shadcn.png"
+            }
+          />
           <AvatarFallback className={" font-bold"}>XP</AvatarFallback>
         </Avatar>
       </Link>
@@ -22,12 +35,16 @@ function Comment(props: Props) {
             "flex flex-col gap-2 bg-darkPurple/10 p-2 rounded-xl mb-1 w-full"
           }
         >
-          <h1 className={" font-bold text-lg text-gray-900"}>User Name</h1>
+          <Link href={"#"}>
+            <h1 className={" font-bold text-lg text-gray-900"}>
+              {commentContent.user.name}
+            </h1>
+          </Link>
           <p className={"text-gray-900 text-md font-medium break-all"}>
-            commentcommentcommentcommentcommentcommentcommentcomment
+            {commentContent.body}
           </p>
         </div>
-        <p className={"text-gray-800 text-sm font-medium"}>1 hour ago</p>
+        <p className={"text-gray-800 text-sm font-medium"}>{timeAgo}</p>
       </div>
     </div>
   );

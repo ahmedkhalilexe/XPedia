@@ -13,8 +13,9 @@ import { useForm } from "react-hook-form";
 import { postSchema, PostType } from "@/app/utils/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useAddPostMutation from "@/app/hooks/feedHooks/useAddPostMutation";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
+import { addPost } from "@/app/redux/feed/feedSlicer";
 
 type Props = {};
 
@@ -27,14 +28,21 @@ function PostForm(props: Props) {
     },
   });
   const { accessToken } = useSelector((state: RootState) => state.user.user);
+  const dispatch = useDispatch();
   const postMutation = useAddPostMutation(accessToken);
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data) => {
-          postMutation.mutate({
-            body: data.content,
-          });
+        onSubmit={form.handleSubmit(async (data) => {
+          await postMutation
+            .mutateAsync({
+              body: data.content,
+            })
+            .then((res) => {
+              console.log("adding to store");
+              dispatch(addPost({ ...res.data, isLiked: false }));
+            });
           form.reset();
         })}
         className={
