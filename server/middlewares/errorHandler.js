@@ -5,6 +5,7 @@ const {
 } = require("@prisma/client/runtime/library");
 const errorHandler = (error, req, res, next) => {
   console.error("Error caught in error handler");
+  console.error(error);
   if (error instanceof AppError) {
     //handle AppError
     return res.status(error.statusCode).json({

@@ -29,7 +29,19 @@ const postsController = {
         include: {
           Postimages: true,
           PostLikes: true,
-          PostComments: true,
+          PostComments: {
+            orderBy: {
+              createdAt: "desc",
+            },
+            include: {
+              user: {
+                select: {
+                  name: true,
+                  profilePicture: true,
+                },
+              },
+            },
+          },
           user: {
             select: {
               name: true,
@@ -54,6 +66,29 @@ const postsController = {
       data: {
         body,
         userId: userId,
+      },
+      include: {
+        Postimages: true,
+        PostLikes: true,
+        PostComments: {
+          orderBy: {
+            createdAt: "desc",
+          },
+          include: {
+            user: {
+              select: {
+                name: true,
+                profilePicture: true,
+              },
+            },
+          },
+        },
+        user: {
+          select: {
+            name: true,
+            profilePicture: true,
+          },
+        },
       },
     });
     return res.status(201).json({
@@ -166,6 +201,14 @@ const postsController = {
         postId,
         userId,
         body,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            profilePicture: true,
+          },
+        },
       },
     });
     return res.status(201).json({
