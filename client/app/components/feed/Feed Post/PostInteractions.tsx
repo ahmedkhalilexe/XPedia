@@ -3,22 +3,26 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { post } from "@/app/utils/types";
 import useHandleLike from "@/app/hooks/feedHooks/useHandleLike";
 import { RootState } from "@/app/redux/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CommentsSection from "@/app/components/feed/CommentsSection";
 import useHandleComment from "@/app/hooks/feedHooks/useHandleComment";
+import { changeLike } from "@/app/redux/feed/feedSlicer";
 
 type Props = {
   post: post;
 };
 
 function PostInteractions({ post }: Props) {
-  const { accessToken } = useSelector((state: RootState) => state.user.user);
+  const { accessToken, id } = useSelector(
+    (state: RootState) => state.user.user,
+  );
   const likeMutation = useHandleLike(
     accessToken,
     post.PostLikes.length,
     post.isLiked,
   );
   const commentMutation = useHandleComment(accessToken);
+  const dispatch = useDispatch();
   return (
     <div>
       <div className={"flex justify-between items-center px-3 font-medium"}>
@@ -36,8 +40,10 @@ function PostInteractions({ post }: Props) {
             "flex items-center gap-2 hover:bg-gray-200 py-1 px-2 rounded-lg cursor-pointer transition-all duration-300"
           }
           onClick={async () => {
-            await likeMutation.mutateAsync(post.id).then(() => {
-              post.isLiked = !post.isLiked;
+            await likeMutation.mutateAsync(post.id).then((res) => {
+              dispatch(
+                changeLike({ postId: post.id, like: res.data, userId: id }),
+              );
             });
           }}
         >

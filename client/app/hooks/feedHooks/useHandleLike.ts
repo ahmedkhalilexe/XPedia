@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 import { privateAxios } from "@/app/utils/axios";
-import { postLikeResponse, postUnlikeResponse } from "@/app/utils/types";
+import { postLikeResponse } from "@/app/utils/types";
 
 const useHandleLike = (token: string, likeCount: number, isLiked: boolean) => {
   return useMutation({
@@ -17,7 +17,7 @@ const useHandleLike = (token: string, likeCount: number, isLiked: boolean) => {
               postId,
             },
           })
-          .then((res) => res.data as postUnlikeResponse);
+          .then((res) => res.data as postLikeResponse);
       } else {
         // like
         return privateAxios

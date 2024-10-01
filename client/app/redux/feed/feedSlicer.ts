@@ -24,7 +24,21 @@ export const feedSlicer = createSlice({
         ...state.posts[postIndex].PostComments,
       ];
     },
+    changeLike: (state, action) => {
+      const postIndex = state.posts.findIndex(
+        (post) => post.id === action.payload.postId,
+      );
+      state.posts[postIndex].isLiked = !state.posts[postIndex].isLiked;
+      if (state.posts[postIndex].isLiked) {
+        state.posts[postIndex].PostLikes.push(action.payload.like);
+      } else {
+        state.posts[postIndex].PostLikes = state.posts[
+          postIndex
+        ].PostLikes.filter((like) => like.userId !== action.payload.userId);
+      }
+    },
   },
 });
 
-export const { addPost, initialPosts, addComment } = feedSlicer.actions;
+export const { addPost, initialPosts, addComment, changeLike } =
+  feedSlicer.actions;

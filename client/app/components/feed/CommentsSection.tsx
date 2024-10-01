@@ -73,7 +73,7 @@ function CommentsSection({ postId, commentList, commentMutation }: Props) {
           ))}
         </div>
         <DialogFooter className={"sm:flex-col"}>
-          <form className={"flex items-center"} onSubmit={handleOnSubmit}>
+          <form className={"flex items-center gap-3"} onSubmit={handleOnSubmit}>
             <Link href={"/#"}>
               <Avatar
                 className={
