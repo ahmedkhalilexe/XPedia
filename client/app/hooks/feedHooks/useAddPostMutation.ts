@@ -24,7 +24,7 @@ const useAddPostMutation = (accessToken: string) => {
         description: "Your post has been added successfully",
       });
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         variant: "destructive",
         title: "Post Failed",
