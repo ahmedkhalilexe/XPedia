@@ -72,6 +72,14 @@ const authController = {
     });
   },
 
+  signOut: async (req, res) => {
+    res.clearCookie("rt");
+    return res.status(200).json({
+      status: "200",
+      message: "User signed out",
+    });
+  },
+
   getRefreshToken: async (req, res) => {
     const refreshToken = req.cookies.rt;
     if (!refreshToken) {
