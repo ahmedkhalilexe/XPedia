@@ -1,5 +1,5 @@
-import AuthPage from "@/app/components/auth/AuthPage";
-import FeedPage from "@/app/components/feed/FeedPage";
+import AuthPage from "@/components/auth/AuthPage";
+import FeedPage from "@/components/feed/FeedPage";
 
 export default function Home() {
   return (

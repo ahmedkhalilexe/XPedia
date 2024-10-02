@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ReactNode } from "react";
-import AuthProvider from "@/app/redux/auth/AuthProvider";
+import AuthProvider from "@/redux/auth/AuthProvider";
 import { Toaster } from "@/components/ui/toaster";
 
 const montserrat = Montserrat({
