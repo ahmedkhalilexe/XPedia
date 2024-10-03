@@ -124,7 +124,25 @@ const postsController = {
       include: {
         Postimages: true,
         PostLikes: true,
-        PostComments: true,
+        PostComments: {
+          orderBy: {
+            createdAt: "desc",
+          },
+          include: {
+            user: {
+              select: {
+                name: true,
+                profilePicture: true,
+              },
+            },
+          },
+        },
+        user: {
+          select: {
+            name: true,
+            profilePicture: true,
+          },
+        },
       },
     });
     return res.status(200).json({
@@ -145,7 +163,25 @@ const postsController = {
         include: {
           Postimages: true,
           PostLikes: true,
-          PostComments: true,
+          PostComments: {
+            orderBy: {
+              createdAt: "desc",
+            },
+            include: {
+              user: {
+                select: {
+                  name: true,
+                  profilePicture: true,
+                },
+              },
+            },
+          },
+          user: {
+            select: {
+              name: true,
+              profilePicture: true,
+            },
+          },
         },
         orderBy: {
           createdAt: "desc",
