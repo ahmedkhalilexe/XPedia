@@ -90,7 +90,15 @@ const authController = {
       process.env.REFRESH_TOKEN_SECRET,
     );
     console.log(decodedRefreshToken.id);
-    const user = await getUser({ id: decodedRefreshToken.id, select: {} });
+    const user = await getUser({
+      id: decodedRefreshToken.id,
+      select: {
+        name: true,
+        dateOfBirth: true,
+        profilePicture: true,
+        friendsLists: true,
+      },
+    });
     if (!user) {
       res.clearCookie("rt");
       throw new AppError("Unauthorized", 401);
