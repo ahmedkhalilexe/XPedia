@@ -7,20 +7,32 @@ import { postsGetResponse } from "@/utils/types";
 import { RotateCw } from "lucide-react";
 import { initialPosts } from "@/redux/feed/feedSlicer";
 
-type Props = {};
+type Props = {
+  isCurrentUser: boolean;
+  isMainFeed: boolean;
+  userId?: string;
+};
 
-function FeedList(props: Props) {
+function FeedList({ isCurrentUser, isMainFeed, userId }: Props) {
   const { accessToken, id } = useSelector(
     (state: RootState) => state.user.user,
   );
   const dispatch = useDispatch();
   const { posts } = useSelector((state: RootState) => state.feed);
+  const requestUri = isCurrentUser
+    ? "/posts/me"
+    : isMainFeed
+      ? "/posts"
+      : "/posts/user";
   const { isLoading } = useQuery("posts", {
     queryFn: async () => {
       return privateAxios
-        .get("/posts", {
+        .get(requestUri, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
+          },
+          params: {
+            userId,
           },
         })
         .then((res) => res.data as postsGetResponse);

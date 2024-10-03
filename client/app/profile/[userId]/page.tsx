@@ -5,7 +5,7 @@ type Props = {
 };
 
 function Page({ params }: Props) {
-  return <ProfilePage />;
+  return <ProfilePage userId={params.userId} />;
 }
 
 export default Page;

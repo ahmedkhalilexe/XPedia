@@ -5,17 +5,25 @@ import SideBar from "@/components/feed/SideBar/SideBar";
 import UserProfile from "@/components/profile/userProfile";
 import ClientProvider from "@/components/reactQuery/ClientProvider";
 
-type Props = {};
+type Props = {
+  userId: string;
+};
 
-function ProfilePage(props: Props) {
+function ProfilePage({ userId }: Props) {
   const { isAuth, status } = useSelector((state: RootState) => state.user.auth);
+  const { id } = useSelector((state: RootState) => state.user.user);
+
+  const isCurrentUser = userId === id;
   return status === "success" && isAuth ? (
     <main className={" flex min-h-screen relative"}>
       {/* Sidebar */}
       <SideBar />
       {/* Feed */}
       <ClientProvider>
-        <UserProfile />
+        <UserProfile
+          isCurrentUser={isCurrentUser}
+          userId={!isCurrentUser ? userId : undefined}
+        />
       </ClientProvider>
     </main>
   ) : null;

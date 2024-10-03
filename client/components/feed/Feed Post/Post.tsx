@@ -14,7 +14,11 @@ function Post({ post }: Props) {
         "flex flex-col w-full drop-shadow-md  rounded-xl bg-saltWhite p-2 lg:p-4"
       }
     >
-      <PostHeader name={post.user.name} createdAt={post.createdAt} />
+      <PostHeader
+        name={post.user.name}
+        createdAt={post.createdAt}
+        userId={post.userId}
+      />
       <PostContent body={post.body} />
       <div className={"w-full h-0.5 rounded-xl bg-gray-200 mb-2"} />
       <PostInteractions post={post} />

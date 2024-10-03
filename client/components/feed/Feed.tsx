@@ -14,7 +14,7 @@ function Feed(props: Props) {
       <h1 className={"text-5xl font-bold text-gray-900 "}>Feed</h1>
       <ClientProvider>
         <PostForm />
-        <FeedList />
+        <FeedList isCurrentUser={false} isMainFeed={true} />
       </ClientProvider>
     </section>
   );

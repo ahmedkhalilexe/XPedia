@@ -7,15 +7,16 @@ type Props = {
   name: string;
   profilePicture?: string;
   createdAt: string;
+  userId: string;
 };
 
-function PostHeader({ name, profilePicture, createdAt }: Props) {
+function PostHeader({ name, profilePicture, createdAt, userId }: Props) {
   const timeAgo = formatDistanceToNow(new Date(createdAt), { addSuffix: true });
   return (
     <div className={"flex justify-between"}>
       {/* user profile and time posted */}
       <div className={"flex gap-2"}>
-        <Link href={"/#"}>
+        <Link href={`/profile/${userId}`}>
           <Avatar
             className={
               "w-12 h-12 hover:drop-shadow-lg transition-all duration-300 "
@@ -28,7 +29,7 @@ function PostHeader({ name, profilePicture, createdAt }: Props) {
           </Avatar>
         </Link>
         <div>
-          <Link href={"/#"}>
+          <Link href={`/profile/${userId}`}>
             <h1
               className={
                 " font-bold text-xl hover:drop-shadow-lg transition-all duration-300"

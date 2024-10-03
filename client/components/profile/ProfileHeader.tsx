@@ -1,11 +1,17 @@
+"use client";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { TbDots } from "react-icons/tb";
 import Image from "next/image";
-type Props = {};
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+type Props = {
+  isCurrentUser: boolean;
+};
 
-function ProfileHeader(props: Props) {
+function ProfileHeader({ isCurrentUser }: Props) {
+  const { name } = useSelector((state: RootState) => state.user.user);
   return (
     <div className={"lg:w-5/6 h-fit"}>
       <div className={"bg-darkPurple w-full h-60 rounded-xl overflow-hidden "}>
@@ -35,16 +41,28 @@ function ProfileHeader(props: Props) {
               <AvatarFallback className={" font-bold"}>XP</AvatarFallback>
             </Avatar>
           </Link>
-          <h1 className={"font-bold text-3xl"}>User Name</h1>
+          <h1 className={"font-bold text-3xl"}>
+            {isCurrentUser ? name : "User Name"}
+          </h1>
         </div>
         <div className={"flex items-center gap-3"}>
-          <Button
-            className={
-              "rounded-xl bg-darkPurple font-medium text-md hover:bg-darkPurple/70"
-            }
-          >
-            Edit Profile
-          </Button>
+          {isCurrentUser ? (
+            <Button
+              className={
+                "rounded-xl bg-darkPurple font-medium text-md hover:bg-darkPurple/70"
+              }
+            >
+              Edit Profile
+            </Button>
+          ) : (
+            <Button
+              className={
+                "rounded-xl bg-darkPurple font-medium text-md hover:bg-darkPurple/70"
+              }
+            >
+              Add Friend
+            </Button>
+          )}
           <Button
             variant={"ghost"}
             className={"rounded-xl hover:bg-darkPurple/5"}

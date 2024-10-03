@@ -14,7 +14,7 @@ function SideBarLinks(props: Props) {
   return (
     <ul className={" flex flex-col gap-12 w-full"}>
       <div className={" flex flex-col gap-4 w-full"}>
-        <SideBarLink href={"/#"} title={"Feed"}>
+        <SideBarLink href={"/"} title={"Feed"}>
           <TbHomeFilled size={24} />
         </SideBarLink>
         <SideBarLink href={"/#"} title={"Messages"}>

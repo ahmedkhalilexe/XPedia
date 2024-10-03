@@ -10,12 +10,12 @@ type Props = {
 };
 
 function UserAvatar({ className, textClass }: Props) {
-  const { name, profilePicture } = useSelector(
+  const { name, profilePicture, id } = useSelector(
     (state: RootState) => state.user.user,
   );
   return (
     <div className={" flex flex-col w-fit justify-center items-center"}>
-      <Link href={"/#"}>
+      <Link href={`/profile/${id}`}>
         <Avatar
           className={cn(
             "w-16 h-16 lg:w-24 lg:h-24 hover:drop-shadow-lg transition-all duration-300 ",
@@ -28,7 +28,7 @@ function UserAvatar({ className, textClass }: Props) {
           <AvatarFallback className={" font-bold"}>XP</AvatarFallback>
         </Avatar>
       </Link>
-      <Link href={"/#"}>
+      <Link href={`/profile/${id}`}>
         <h1
           className={cn(
             " font-bold text-2xl hover:drop-shadow-lg transition-all duration-300",
