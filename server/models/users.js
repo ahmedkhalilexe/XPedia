@@ -6,7 +6,7 @@ const userModel = {
   getUser: ({
     email,
     id,
-    select: { name, dateOfBirth, profilePicture, password, friendsLists },
+    select: { name, dateOfBirth, profilePicture, password },
   }) => {
     return prisma.users
       .findUnique({
@@ -21,7 +21,9 @@ const userModel = {
           dateOfBirth: !!dateOfBirth,
           profilePicture: !!profilePicture,
           password: !!password,
-          friendsLists: !!friendsLists,
+          friendshipsSent: {
+            where: {},
+          },
         },
       })
       .then((user) => user);
@@ -49,53 +51,37 @@ const userModel = {
     });
   },
 
-  getFriends: async ({ userId }) => {
-    return prisma.users.findUnique({
-      where: {
-        id: userId,
-      },
-      select: {
-        friendsLists: {
-          select: {
-            Friends: true,
-          },
-        },
-      },
-    });
-  },
+  // getFriends: async ({ userId }) => {
+  //   return prisma.users.findUnique({
+  //     where: {
+  //       id: userId,
+  //     },
+  //     select: {
+  //       friendsLists: {
+  //         select: {
+  //           Friends: true,
+  //         },
+  //       },
+  //     },
+  //   });
+  // },
 
-  addFriend: async ({ userId, friendListId }) => {
-    const isFriend = await prisma.friendsLists.findUnique({
-      where: {
-        id: friendListId,
-        Friends: {
-          every: {
-            userId,
-          },
-        },
-      },
-      select: {
-        Friends: true,
-      },
-    });
-    if (isFriend.Friends.length > 0) {
-      throw new AppError("user already a friend", 400);
-    }
-    return prisma.friends.create({
-      data: {
-        userId,
-        friendListId,
-      },
-      include: {
-        user: {
-          select: {
-            name: true,
-            profilePicture: true,
-          },
-        },
-      },
-    });
-  },
+  // addFriend: async ({ userId, friendListId }) => {
+  //   return prisma.friends.create({
+  //     data: {
+  //       userId,
+  //       friendListId,
+  //     },
+  //     include: {
+  //       user: {
+  //         select: {
+  //           name: true,
+  //           profilePicture: true,
+  //         },
+  //       },
+  //     },
+  //   });
+  // },
 };
 
 module.exports = userModel;

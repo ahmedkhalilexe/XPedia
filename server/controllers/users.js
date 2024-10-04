@@ -1,10 +1,4 @@
-const {
-  getUsers,
-  getUser,
-  getUserByName,
-  getFriends,
-  addFriend,
-} = require("../models/users");
+const { getUsers, getUser, getUserByName } = require("../models/users");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const AppError = require("../utils/AppError");
@@ -22,23 +16,45 @@ const usersController = {
 
   // GET /users/id?id=1
   getUser: async (req, res) => {
-    const id = req.query.id;
-    const user = await getUser({
-      id,
-      select: {
-        firstName: true,
-        lastName: true,
-        dateOfBirth: true,
-        profilePicture: true,
-      },
-    });
+    const userId = req.query.userId;
+    const { id } = req.user;
+    const user = await prisma.users
+      .findUnique({
+        where: {
+          id: userId,
+        },
+        select: {
+          id: true,
+          name: true,
+          profilePicture: true,
+          friendshipsSent: {
+            where: {
+              userBId: id,
+            },
+          },
+          friendshipsReceived: {
+            where: {
+              userAId: id,
+            },
+          },
+        },
+      })
+      .then((user) => user);
     if (!user) {
       throw new AppError("User not found", 404);
     }
+    const isFriend =
+      user.friendshipsSent.length > 0 || user.friendshipsReceived.length > 0;
+    console.log(isFriend);
     return res.status(200).json({
       status: 200,
       message: "Successfully retrieved user",
-      data: user,
+      data: {
+        id: user.id,
+        name: user.name,
+        profilePicture: user.profilePicture,
+        isFriend,
+      },
     });
   },
 
@@ -53,42 +69,110 @@ const usersController = {
     });
   },
 
-  // GET /users/friends?id=1
-  getFriends: async (req, res) => {
-    const userId = req.query.userId;
-    const friends = await getFriends({ userId });
-    return res.status(200).json({
-      status: 200,
-      message: "Successfully retrieved user's friends",
-      data: friends,
-    });
-  },
-
-  // POST /users/friends?id=1
-  addFriend: async (req, res) => {
-    const userId = req.query.userId;
-    const friendListId = req.user.friendsListId;
-    const friends = await addFriend({ userId, friendListId });
-    return res.status(200).json({
-      status: 200,
-      message: "user added successfully",
-      data: friends,
-    });
-  },
-
-  // DELETE /users/friends?id=1
-  deleteFriend: async (req, res) => {
-    const userId = req.query.userId;
-    const friendListId = req.user.friendsListId;
-    const friends = await prisma.friends.deleteMany({
-      where: {
-        userId,
-        friendListId,
+  //POST /users/friendRequest
+  friendRequest: async (req, res) => {
+    const userId = req.body.userId;
+    const { id } = req.user;
+    const friendRequest = await prisma.friendRequests.create({
+      data: {
+        senderId: id,
+        receiverId: userId,
       },
     });
-    return res.status(200).json({
+    res.status(200).json({
       status: 200,
-      message: "friend deleted successfully",
+      message: "Friend request sent",
+      data: friendRequest,
+    });
+  },
+
+  //PUT /users/friendRequest?userId = 1
+  updateFriendRequest: async (req, res) => {
+    const { userId, status } = req.body;
+    const { id } = req.user;
+    const friendRequest = await prisma.friendRequests.update({
+      where: {
+        senderId_receiverId: {
+          senderId: userId,
+          receiverId: id,
+        },
+      },
+      data: {
+        status,
+      },
+    });
+    if (status === "ACCEPTED") {
+      const friendship = await prisma.friendship.create({
+        data: {
+          userAId: id,
+          userBId: userId,
+        },
+      });
+    }
+    res.status(200).json({
+      status: 200,
+      message: "Friend request updated",
+      data: friendRequest,
+    });
+  },
+
+  //GET /users/friendRequest
+  getFriendRequests: async (req, res) => {
+    const { id } = req.user;
+    const friendRequests = await prisma.friendRequests.findMany({
+      where: {
+        AND: [
+          { receiverId: id },
+          {
+            status: "PENDING",
+          },
+        ],
+      },
+      include: {
+        sender: {
+          select: {
+            id: true,
+            name: true,
+            profilePicture: true,
+          },
+        },
+      },
+    });
+    res.status(200).json({
+      status: 200,
+      message: "Friend requests retrieved",
+      data: friendRequests,
+    });
+  },
+
+  // GET /users/friends/me
+  getFriends: async (req, res) => {
+    const { id } = req.user;
+    const friends = await prisma.friendship.findMany({
+      where: {
+        OR: [
+          {
+            userAId: id,
+          },
+          {
+            userBId: id,
+          },
+        ],
+      },
+      include: {
+        userB: {
+          select: {
+            id: true,
+            name: true,
+            profilePicture: true,
+          },
+        },
+      },
+    });
+    res.status(200).json({
+      status: 200,
+      message: "Friends retrieved",
+      data: friends,
     });
   },
 };

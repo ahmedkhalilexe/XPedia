@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 const postsController = {
   // GET /posts
   GetPosts: async (req, res) => {
-    const { id, friendsListId } = req.user;
+    const { id } = req.user;
     const posts = await prisma.posts
       .findMany({
         where: {
@@ -14,11 +14,12 @@ const postsController = {
             },
             {
               user: {
-                Friends: {
-                  some: {
-                    friendListId: friendsListId,
-                  },
-                },
+                friendshipsSent: { some: { userBId: id } }, // Posts by friends (userA)
+              },
+            },
+            {
+              user: {
+                friendshipsReceived: { some: { userAId: id } }, // Posts by friends (userB)
               },
             },
           ],
@@ -27,7 +28,7 @@ const postsController = {
           createdAt: "desc",
         },
         include: {
-          Postimages: true,
+          PostImages: true,
           PostLikes: true,
           PostComments: {
             orderBy: {
@@ -68,7 +69,7 @@ const postsController = {
         userId: userId,
       },
       include: {
-        Postimages: true,
+        PostImages: true,
         PostLikes: true,
         PostComments: {
           orderBy: {
@@ -122,7 +123,7 @@ const postsController = {
         userId,
       },
       include: {
-        Postimages: true,
+        PostImages: true,
         PostLikes: true,
         PostComments: {
           orderBy: {
@@ -144,6 +145,9 @@ const postsController = {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
     return res.status(200).json({
       status: 200,
@@ -161,7 +165,7 @@ const postsController = {
           userId,
         },
         include: {
-          Postimages: true,
+          PostImages: true,
           PostLikes: true,
           PostComments: {
             orderBy: {

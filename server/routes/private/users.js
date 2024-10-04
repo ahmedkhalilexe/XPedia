@@ -7,12 +7,24 @@ router.get("/id", tryCatch(require("../../controllers/users").getUser));
 
 router.get("/search", tryCatch(require("../../controllers/users").searchUsers));
 
-router.get("/friends", tryCatch(require("../../controllers/users").getFriends));
-
-router.post("/friends", tryCatch(require("../../controllers/users").addFriend));
-
-router.delete(
-  "/friends",
-  tryCatch(require("../../controllers/users").deleteFriend),
+router.get(
+  "/friends/me",
+  tryCatch(require("../../controllers/users").getFriends),
 );
+
+router.post(
+  "/friendRequest",
+  tryCatch(require("../../controllers/users").friendRequest),
+);
+
+router.put(
+  "/friendRequest",
+  tryCatch(require("../../controllers/users").updateFriendRequest),
+);
+
+router.get(
+  "/friendRequest",
+  tryCatch(require("../../controllers/users").getFriendRequests),
+);
+
 module.exports = router;

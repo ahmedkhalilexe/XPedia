@@ -28,7 +28,6 @@ const authController = {
         name: true,
         dateOfBirth: true,
         profilePicture: true,
-        friendsLists: true,
       },
     });
     if (!user) {
@@ -39,7 +38,7 @@ const authController = {
       throw new AppError("Invalid credentials", 401);
     }
     const accessToken = jwt.sign(
-      { id: user.id, email: user.email, friendsListId: user.friendsLists.id },
+      { id: user.id, email: user.email },
       process.env.ACCESS_TOKEN_SECRET,
       {
         expiresIn: "15m",
@@ -89,16 +88,15 @@ const authController = {
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET,
     );
-    console.log(decodedRefreshToken.id);
     const user = await getUser({
       id: decodedRefreshToken.id,
       select: {
         name: true,
         dateOfBirth: true,
         profilePicture: true,
-        friendsLists: true,
       },
     });
+    console.log(user);
     if (!user) {
       res.clearCookie("rt");
       throw new AppError("Unauthorized", 401);

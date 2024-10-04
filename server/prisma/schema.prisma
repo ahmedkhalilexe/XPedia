@@ -26,10 +26,13 @@ model Users {
   Posts                    Posts[]
   PostComments             PostComments[]
   PostLikes                PostLikes[]
-  friendsLists             friendsLists?
-  Friends                  Friends[]
   Messages                 Messages[]
   ConversationParticipants ConversationParticipants[]
+  friendshipsSent          Friendship[]               @relation("friendshipsSent")
+  friendshipsReceived      Friendship[]               @relation("friendshipsReceived")
+
+  friendRequestsSent     FriendRequests[] @relation("friendRequestsSent")
+  friendRequestsReceived FriendRequests[] @relation("friendRequestsRecieved")
 }
 
 model Posts {
@@ -39,12 +42,12 @@ model Posts {
   userId       String
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  Postimages   Postimages[]
+  PostImages   PostImages[]
   PostComments PostComments[]
   PostLikes    PostLikes[]
 }
 
-model Postimages {
+model PostImages {
   id        String   @id @default(cuid())
   uri       String
   post      Posts    @relation(fields: [postId], references: [id])
@@ -74,22 +77,33 @@ model PostLikes {
   @@unique([userId, postId])
 }
 
-model friendsLists {
-  id      String    @id @default(cuid())
-  user    Users     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId String    @unique
-  Friends Friends[]
+model Friendship {
+  id        String   @id @default(cuid())
+  userA     Users    @relation("friendshipsSent", fields: [userAId], references: [id], onDelete: Cascade)
+  userAId   String
+  userB     Users    @relation("friendshipsReceived", fields: [userBId], references: [id], onDelete: Cascade)
+  userBId   String
+  createdAt DateTime @default(now())
+
+  @@unique([userAId, userBId])
 }
 
-model Friends {
-  id           String       @id @default(cuid())
-  user         Users        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String
-  friendList   friendsLists @relation(fields: [friendListId], references: [id], onDelete: Cascade)
-  friendListId String
-  createdAt    DateTime     @default(now())
+model FriendRequests {
+  id         String              @id @default(cuid())
+  sender     Users               @relation("friendRequestsSent", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId   String
+  receiver   Users               @relation("friendRequestsRecieved", fields: [receiverId], references: [id], onDelete: Cascade)
+  receiverId String
+  status     FriendRequestStatus @default(PENDING)
+  createdAt  DateTime            @default(now())
 
-  @@unique([userId, friendListId])
+  @@unique([senderId, receiverId])
+}
+
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
 
 model Conversations {
