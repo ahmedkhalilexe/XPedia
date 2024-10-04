@@ -67,7 +67,7 @@ export type post = {
   userId: string;
   createdAt: string;
   updatedAt: string;
-  Postimages: string[];
+  PostImages: string[];
   PostLikes: like[];
   PostComments: comment[];
   user: {
@@ -123,4 +123,15 @@ export type commentAddResponse = {
 
 export type feedState = {
   posts: post[];
+};
+type userProfile = {
+  id: string;
+  name: string;
+  profilePicture: string;
+  isFriend: boolean;
+};
+export type userProfileResponse = {
+  status: string;
+  message: string;
+  data: userProfile;
 };

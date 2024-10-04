@@ -6,12 +6,14 @@ import { TbDots } from "react-icons/tb";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import useProfileDetails from "@/hooks/profileHooks/useProfileDetails";
 type Props = {
-  isCurrentUser: boolean;
+  userId: string;
 };
 
-function ProfileHeader({ isCurrentUser }: Props) {
-  const { name } = useSelector((state: RootState) => state.user.user);
+function ProfileHeaderOther({ userId }: Props) {
+  const { accessToken } = useSelector((state: RootState) => state.user.user);
+  const { data } = useProfileDetails(userId, accessToken);
   return (
     <div className={"lg:w-5/6 h-fit"}>
       <div className={"bg-darkPurple w-full h-60 rounded-xl overflow-hidden "}>
@@ -37,22 +39,24 @@ function ProfileHeader({ isCurrentUser }: Props) {
                 "w-36 h-36 hover:drop-shadow-lg transition-all duration-300 border-4 border-lightGray "
               }
             >
-              <AvatarImage src={"https://github.com/shadcn.png"} />
+              <AvatarImage
+                src={
+                  data?.data.profilePicture || "https://github.com/shadcn.png"
+                }
+              />
               <AvatarFallback className={" font-bold"}>XP</AvatarFallback>
             </Avatar>
           </Link>
-          <h1 className={"font-bold text-3xl"}>
-            {isCurrentUser ? name : "User Name"}
-          </h1>
+          <h1 className={"font-bold text-3xl"}>{data?.data.name}</h1>
         </div>
         <div className={"flex items-center gap-3"}>
-          {isCurrentUser ? (
+          {data?.data.isFriend ? (
             <Button
               className={
                 "rounded-xl bg-darkPurple font-medium text-md hover:bg-darkPurple/70"
               }
             >
-              Edit Profile
+              Delete Friend
             </Button>
           ) : (
             <Button
@@ -75,4 +79,4 @@ function ProfileHeader({ isCurrentUser }: Props) {
   );
 }
 
-export default ProfileHeader;
+export default ProfileHeaderOther;

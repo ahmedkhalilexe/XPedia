@@ -20,10 +20,7 @@ function ProfilePage({ userId }: Props) {
       <SideBar />
       {/* Feed */}
       <ClientProvider>
-        <UserProfile
-          isCurrentUser={isCurrentUser}
-          userId={!isCurrentUser ? userId : undefined}
-        />
+        <UserProfile isCurrentUser={isCurrentUser} userId={userId} />
       </ClientProvider>
     </main>
   ) : null;
