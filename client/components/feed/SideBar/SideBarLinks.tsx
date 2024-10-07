@@ -20,7 +20,7 @@ function SideBarLinks(props: Props) {
         <SideBarLink href={"/#"} title={"Messages"}>
           <TbMessageFilled size={24} />
         </SideBarLink>
-        <SideBarLink href={"/#"} title={"Friends"}>
+        <SideBarLink href={"/friends"} title={"Friends"}>
           <FaUserFriends size={24} />
         </SideBarLink>
         <SideBarLink href={"/#"} title={"Settings"}>
