@@ -37,6 +37,13 @@ const usersController = {
               userAId: id,
             },
           },
+          friendRequestsReceived: {
+            where: {
+              senderId: id,
+              receiverId: userId,
+              status: "PENDING",
+            },
+          },
         },
       })
       .then((user) => user);
@@ -45,7 +52,7 @@ const usersController = {
     }
     const isFriend =
       user.friendshipsSent.length > 0 || user.friendshipsReceived.length > 0;
-    console.log(isFriend);
+    // const isFriendRequestRecieved = user.friendRequestsRecieved.length > 0;
     return res.status(200).json({
       status: 200,
       message: "Successfully retrieved user",
@@ -53,6 +60,7 @@ const usersController = {
         id: user.id,
         name: user.name,
         profilePicture: user.profilePicture,
+        isFriendRequestSent: user.friendRequestsReceived.length > 0,
         isFriend,
       },
     });
@@ -112,6 +120,25 @@ const usersController = {
     res.status(200).json({
       status: 200,
       message: "Friend request updated",
+      data: friendRequest,
+    });
+  },
+
+  //DELETE /users/friendRequest?userId = 1
+  deleteFriendRequest: async (req, res) => {
+    const userId = req.query.userId;
+    const { id } = req.user;
+    const friendRequest = await prisma.friendRequests.delete({
+      where: {
+        senderId_receiverId: {
+          senderId: id,
+          receiverId: userId,
+        },
+      },
+    });
+    res.status(200).json({
+      status: 200,
+      message: "Friend request deleted",
       data: friendRequest,
     });
   },

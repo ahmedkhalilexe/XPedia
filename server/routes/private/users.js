@@ -22,6 +22,10 @@ router.put(
   tryCatch(require("../../controllers/users").updateFriendRequest),
 );
 
+router.delete(
+  "/friendRequest",
+  tryCatch(require("../../controllers/users").deleteFriendRequest),
+);
 router.get(
   "/friendRequest",
   tryCatch(require("../../controllers/users").getFriendRequests),

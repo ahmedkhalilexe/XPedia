@@ -96,7 +96,6 @@ const authController = {
         profilePicture: true,
       },
     });
-    console.log(user);
     if (!user) {
       res.clearCookie("rt");
       throw new AppError("Unauthorized", 401);
