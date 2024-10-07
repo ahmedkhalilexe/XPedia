@@ -7,13 +7,15 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import useProfileDetails from "@/hooks/profileHooks/useProfileDetails";
+import AddCancelRequestButton from "@/components/profile/buttons/AddCancelRequestButton";
+import DeleteFriendButton from "@/components/profile/buttons/DeleteFriendButton";
 type Props = {
   userId: string;
 };
 
 function ProfileHeaderOther({ userId }: Props) {
   const { accessToken } = useSelector((state: RootState) => state.user.user);
-  const { data } = useProfileDetails(userId, accessToken);
+  const { data, isLoading } = useProfileDetails(userId, accessToken);
   return (
     <div className={"lg:w-5/6 h-fit"}>
       <div className={"bg-darkPurple w-full h-60 rounded-xl overflow-hidden "}>
@@ -49,31 +51,24 @@ function ProfileHeaderOther({ userId }: Props) {
           </Link>
           <h1 className={"font-bold text-3xl"}>{data?.data.name}</h1>
         </div>
-        <div className={"flex items-center gap-3"}>
-          {data?.data.isFriend ? (
+        {!isLoading && data ? (
+          <div className={"flex items-center gap-3"}>
+            {data?.data.isFriend ? (
+              <DeleteFriendButton />
+            ) : (
+              <AddCancelRequestButton
+                userId={userId}
+                isRequestSent={data.data.isFriendRequestSent}
+              />
+            )}
             <Button
-              className={
-                "rounded-xl bg-darkPurple font-medium text-md hover:bg-darkPurple/70"
-              }
+              variant={"ghost"}
+              className={"rounded-xl hover:bg-darkPurple/5"}
             >
-              Delete Friend
+              <TbDots size={24} />
             </Button>
-          ) : (
-            <Button
-              className={
-                "rounded-xl bg-darkPurple font-medium text-md hover:bg-darkPurple/70"
-              }
-            >
-              Add Friend
-            </Button>
-          )}
-          <Button
-            variant={"ghost"}
-            className={"rounded-xl hover:bg-darkPurple/5"}
-          >
-            <TbDots size={24} />
-          </Button>
-        </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );

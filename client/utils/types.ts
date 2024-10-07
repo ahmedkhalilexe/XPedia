@@ -129,6 +129,7 @@ type userProfile = {
   name: string;
   profilePicture: string;
   isFriend: boolean;
+  isFriendRequestSent: boolean;
 };
 export type userProfileResponse = {
   status: string;

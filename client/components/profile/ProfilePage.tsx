@@ -4,6 +4,8 @@ import { RootState } from "@/redux/store";
 import SideBar from "@/components/feed/SideBar/SideBar";
 import UserProfile from "@/components/profile/userProfile";
 import ClientProvider from "@/components/reactQuery/ClientProvider";
+import { useRouter } from "next/navigation";
+import { useLayoutEffect } from "react";
 
 type Props = {
   userId: string;
@@ -12,6 +14,10 @@ type Props = {
 function ProfilePage({ userId }: Props) {
   const { isAuth, status } = useSelector((state: RootState) => state.user.auth);
   const { id } = useSelector((state: RootState) => state.user.user);
+  const router = useRouter();
+  if (!isAuth && status === "failed") {
+    router.replace("/");
+  }
 
   const isCurrentUser = userId === id;
   return status === "success" && isAuth ? (
