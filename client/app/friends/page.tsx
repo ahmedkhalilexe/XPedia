@@ -1,7 +1,9 @@
+import FriendsPage from "@/components/friends/FriendsPage";
+
 type Props = {};
 
 function Page(props: Props) {
-  return <div>Friends</div>;
+  return <FriendsPage />;
 }
 
 export default Page;
