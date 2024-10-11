@@ -136,3 +136,21 @@ export type userProfileResponse = {
   message: string;
   data: userProfile;
 };
+export type friendRequestsResponse = {
+  message: string;
+  status: string;
+  data: friendRequest[];
+};
+
+export type friendRequest = {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  status: "PENDING" | "ACCEPTED" | "REJECTED";
+  createdAt: string;
+  sender: {
+    id: string;
+    name: string;
+    profilePicture: string;
+  };
+};

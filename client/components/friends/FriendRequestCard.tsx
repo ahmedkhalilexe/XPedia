@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { friendRequest, friendRequestsResponse } from "@/utils/types";
 
-type Props = {};
+type Props = {
+  request: friendRequest;
+};
 
-function FriendRequestCard(props: Props) {
+function FriendRequestCard({ request }: Props) {
   return (
     <div
       className={
@@ -18,7 +21,7 @@ function FriendRequestCard(props: Props) {
         alt={"profile picture"}
       />
       <div className={"w-full p-3 bg-saltWhite"}>
-        <h2 className={"text-lg font-bold"}>User Name</h2>
+        <h2 className={"text-lg font-bold"}>{request.sender.name}</h2>
         <Button
           className={
             "w-full my-3 text-md font-bold bg-darkPurple hover:bg-darkPurple/70"

@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import SideBar from "@/components/feed/SideBar/SideBar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import FriendsList from "@/components/friends/FriendsList";
-import FriendRequestCard from "@/components/friends/FriendRequestCard";
+import FriendRequestsTab from "@/components/friends/FriendRequestsTab";
+import ClientProvider from "@/components/reactQuery/ClientProvider";
 
 function FriendsPage() {
   const { isAuth, status } = useSelector((state: RootState) => state.user.auth);
@@ -37,28 +37,12 @@ function FriendsPage() {
             </TabsList>
             <TabsContent value="friendRequests">
               {/* Friend Requests List */}
-              <FriendsList>
-                <FriendRequestCard />
-                <FriendRequestCard />
-                <FriendRequestCard />
-                <FriendRequestCard />
-                <FriendRequestCard />
-                <FriendRequestCard />
-                <FriendRequestCard />
-                <FriendRequestCard />
-                <FriendRequestCard />
-                <FriendRequestCard />
-                <FriendRequestCard />
-                <FriendRequestCard />
-                <FriendRequestCard />
-                <FriendRequestCard />
-                <FriendRequestCard />
-                <FriendRequestCard />
-              </FriendsList>
+              <ClientProvider>
+                <FriendRequestsTab />
+              </ClientProvider>
             </TabsContent>
             <TabsContent value="allFriends">
               {/* All Friends List */}
-              Change your password here.
             </TabsContent>
           </Tabs>
         </div>
