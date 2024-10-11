@@ -154,3 +154,21 @@ export type friendRequest = {
     profilePicture: string;
   };
 };
+
+export type friend = {
+  id: string;
+  userAId: string;
+  userBId: string;
+  createdAt: string; // Can be `Date` if you plan to parse it
+  userB: {
+    id: string;
+    name: string;
+    profilePicture: string;
+  };
+};
+
+export type friendsResponse = {
+  status: number;
+  message: string;
+  data: friend[];
+};

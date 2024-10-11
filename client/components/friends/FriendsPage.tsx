@@ -5,9 +5,15 @@ import SideBar from "@/components/feed/SideBar/SideBar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FriendRequestsTab from "@/components/friends/FriendRequestsTab";
 import ClientProvider from "@/components/reactQuery/ClientProvider";
+import { useRouter } from "next/navigation";
+import FriendsTab from "@/components/friends/FriendsTab";
 
 function FriendsPage() {
   const { isAuth, status } = useSelector((state: RootState) => state.user.auth);
+  const router = useRouter();
+  if (!isAuth && status === "failed") {
+    router.replace("/");
+  }
   return status === "success" && isAuth ? (
     <main className={" flex min-h-screen relative"}>
       {/* Sidebar */}
@@ -42,7 +48,9 @@ function FriendsPage() {
               </ClientProvider>
             </TabsContent>
             <TabsContent value="allFriends">
-              {/* All Friends List */}
+              <ClientProvider>
+                <FriendsTab />
+              </ClientProvider>
             </TabsContent>
           </Tabs>
         </div>
